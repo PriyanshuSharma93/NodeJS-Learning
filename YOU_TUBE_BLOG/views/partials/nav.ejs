@@ -1,7 +1,8 @@
 <nav class="navbar sm:navbar-expand bg-1 fg-2">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Blogify</a>
-    <button class="btn-icon navbar-toggler" type="button" data-bs-toggle="drawer" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="btn-icon navbar-toggler" type="button" data-bs-toggle="drawer" data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon" aria-hidden="true"></span>
     </button>
     <dialog class="drawer drawer-end" tabindex="-1" id="navbarNavAltMarkup" aria-labelledby="navbarNavAltMarkupLabel">
@@ -12,11 +13,42 @@
       <div class="drawer-body">
         <div class="nav nav-pills navbar-nav">
           <a class="nav-link active" aria-current="page" href="#">Home</a>
-          <a class="nav-link" href="#">Add Blog</a>
-          <a class="nav-link" href="#">Pricing</a>
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+
+          <% if (locals.user) { %>
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/add-new">Add Blog</a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Priyanshu Sharma
+              </a>
+
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="/user/logout">Logout</a>
+                </li>
+              </ul>
+            </li>
+            <% }else{%>
+              <li class="nav-item">
+                <a class="nav-link" href="/user/signup">Create Account</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/user/signin">Signin</a>
+              </li>
+              <% } %>
+
+
         </div>
       </div>
     </dialog>
   </div>
 </nav>
+
+<% if (locals.error){%>
+  <div class="alert alert-success" role="alert">
+    <%= locals.error %>
+  </div>
+  <% }%>

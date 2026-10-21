@@ -1,6 +1,6 @@
-
 const { createHmac, randomBytes } = require("crypto");
 const { Schema, model } = require("mongoose");
+const { createTokenForUser } = require("../services/authentication");
 
 const userSchema = new Schema(
   {
@@ -34,7 +34,7 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-// Hash password before validation completes
+// Hash password before validation
 userSchema.pre("validate", function () {
   if (!this.isModified("password")) return;
 
@@ -48,26 +48,30 @@ userSchema.pre("validate", function () {
   this.password = hashedPassword;
 });
 
-// Match password during login
-userSchema.static("matchPassword", async function (email, password) {
-  const user = await this.findOne({ email });
+// Match password and generate JWT token
+userSchema.static(
+  "matchPasswordAndGenerateToken",
+  async function (email, password) {
+    const user = await this.findOne({ email });
 
-  if (!user) {
-    throw new Error("User not found!");
+    if (!user) {
+      throw new Error("User not found!");
+    }
+
+    const userProvidedHash = createHmac("sha256", user.salt)
+      .update(password)
+      .digest("hex");
+
+    if (user.password !== userProvidedHash) {
+      throw new Error("Incorrect password!");
+    }
+
+    // Generate token using the shared authentication service
+    const token = createTokenForUser(user);
+
+    return token;
   }
-
-  const salt = user.salt;
-
-  const userProvidedHash = createHmac("sha256", salt)
-    .update(password)
-    .digest("hex");
-
-  if (user.password !== userProvidedHash) {
-    throw new Error("Incorrect password!");
-  }
-
-  return user;
-});
+);
 
 const User = model("user", userSchema);
 
