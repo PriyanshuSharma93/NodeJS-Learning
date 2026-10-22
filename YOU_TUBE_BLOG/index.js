@@ -26,7 +26,7 @@ app.set("views",path.resolve("./views"));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(checkForAuthenticationCookie("token"));
-app.use(express.static(path.resolve("./public")));
+app.use(express.static("public"));
 
 
 app.get("/",async(req,res)=>{
