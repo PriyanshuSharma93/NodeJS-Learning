@@ -1,0 +1,1 @@
+2026/10/27 18:02:17 [error] 13208#18464: *2 CreateFile() "C:\Users\Priyanshu Sharma\Downloads\nginx-1.30.6/html/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost", referrer: "http://localhost/?utm_source=chatgpt.com"
